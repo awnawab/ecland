@@ -99,10 +99,10 @@ USE SURFPP_CTL_MOD, ONLY: SURFPP_CTL
 !      PSSRFLTI  :  NET SOLAR RADIATION AT THE SURFACE, TILED        Wm-2
 !      PSLRFL    :  NET THERMAL RADIATION AT THE SURFACE             Wm-2
 !      PSST      :  Sea surface temperatute                          K
-!      PUCURR    :   U-comp of ocean surface current                 m/s
-!      PVCURR    :   V-comp of ocean surface current                 m/s
-!      PUSTOKES  :   U-comp of surface Stokes velocity               m/s
-!      PVSTOKES  :   V-comp of surface Stokes velocity               m/s
+!      PUCURR    :  U-comp of ocean surface current                  m/s
+!      PVCURR    :  V-comp of ocean surface current                  m/s
+!      PUSTOKES  :  U-comp of surface Stokes velocity                m/s
+!      PVSTOKES  :  V-comp of surface Stokes velocity                m/s
 
 !    Reals (Updated):
 !      PAHFSTI   :  SURFACE SENSIBLE HEAT FLUX                       W/m2
