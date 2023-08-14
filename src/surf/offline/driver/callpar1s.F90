@@ -644,7 +644,7 @@ CALL SURFBC(YSURF, KIDIA,KFDIA,KLON,KTILES,KLEVSN &
      &           ,PLAILC ,PLAIHC, PLAILI, PLAIHI, PLAILC, PLAIHC,ZAVGPARC &     
      &           ,PLSM   ,PCI    ,PCIL, PCLAKE,PHLICE,PGEMU  ,PSNS, PWL,PRSN &  
      &           ,LESNICE &
-     &           ,LLLAND ,LLSICE ,LLLICE,LLLAKE,LLNH, LLOCN_KPP &    
+     &           ,LLLAND ,LLSICE ,LLLICE, LLLAKE,LLNH, LLOCN_KPP &    
      &           ,ITVL   ,ICO2TYP, ITVH   ,ISOTY &
      &           ,ZCVL   ,ZCVH   ,ZCUR  , ZLAIL , ZLAIH, ZLAILP, ZLAIHP, ZAVGPAR & 
      &           ,ZWLMX  ,ZFRTI,ZCSN)
