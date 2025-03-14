@@ -68,3 +68,5 @@ foreach( test ${tests} )
        endif()
     endforeach()
 endforeach()
+
+add_subdirectory( ifsbench )
