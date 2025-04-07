@@ -31,6 +31,7 @@ SAVE
 ! VFCUR   - urban cover (PASSIVE)
 ! VFTVL   - low vegetation type
 ! VFTVH   - high vegetation type
+!CORRECT THESE REPEATED ENTIRES 
 ! VFLAIL  - low vegetation lai
 ! VFLAIH  - high vegetation lai
 ! VFLAIL  - low vegetation lai from 10 days before
