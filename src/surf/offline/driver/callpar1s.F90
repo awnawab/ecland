@@ -1127,6 +1127,7 @@ IF ( LESURF ) THEN
      & KDHVIIS , KDHFIIS,& 
      & KDHVWLS , KDHFWLS,&
      & KDHVBIOS, KDHFBIOS, KDHVVEGS, KDHFVEGS, &              !CTESSEL
+     & KVTYPES, &
      & ITVL  , ITVH, IVEG, ISOTY, &
      & PSSDP2, PSSDP3, &
      & PTSPHY , PSDOR , ZFRTI,&
