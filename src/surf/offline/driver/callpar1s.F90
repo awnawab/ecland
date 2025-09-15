@@ -578,7 +578,6 @@ REAL(KIND=JPRB)  :: ZALCOEFF(KLON,6)
 
 INTEGER(KIND=JPIM) :: JPDIAG=12,KULOUT=-1_JPIM
 REAL(KIND=JPRB)  :: ZEXDIAG(KLON,12)
-INTEGER(KIND=JPIM), PARAMETER :: INCL = 27_JPIM
 
 REAL(KIND=JPHOOK) :: ZHOOK_HANDLE
 
@@ -821,10 +820,10 @@ PFRTH(KIDIA:KFDIA,KLEV)=ZEMIS(KIDIA:KFDIA)* &
 !*      1.3b 
 
 IF ( (KSTEP==KSTART) .AND. (LEWARMSTART) )  THEN
-  CALL SURFWS(YSURF, KIDIA, KFDIA, KLON, KLEVS, KLEVSN, KTILES, INCL=INCL  &
-             ,PSDOR,LLSICE                                       &
-             ,PLSM,PCIL, ZFRTI, PMU0M                                 &
-             ,PTSA, PTL,PASN                                     &
+  CALL SURFWS(YSURF, KIDIA, KFDIA, KLON, KLEVS, KLEVSN, KTILES &
+             ,PSDOR,LLSICE                                     &
+             ,PLSM,PCIL, ZFRTI, PMU0M                          &
+             ,PTSA, PTL,PASN                                   &
              ,PTSN, PSNS, PRSN, PWSN                           )
 ENDIF
          
