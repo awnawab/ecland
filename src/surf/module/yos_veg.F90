@@ -46,6 +46,8 @@ REAL(KIND=JPRB) :: REPSR                     ! MINIMUM VALUE FOR SW RADIATION IN
                                              !  (Simplified physics only)
 REAL(KIND=JPRB) :: RLAIINT                   ! Interactive LAI coefficient (1=interactive ; 0=climatology)
 LOGICAL         :: LELAIV                    ! VARIABLE LAI
+LOGICAL         :: LEVVCOV                   ! VARIABLE Cveg: USE LAMBERR-BEER law for Cveg
+LOGICAL         :: LEVZ0                     ! Time varying Z0 (eg. Raupach 1994)
 LOGICAL         :: LECTESSEL                 ! True when using CTESSEL scheme for CO2 surface fluxes
 LOGICAL         :: LEAGS                     ! True when using CTESSEL scheme for H20 surface fluxes
 LOGICAL         :: LEFARQUHAR                ! True when using Farquhar photosynthesis model
