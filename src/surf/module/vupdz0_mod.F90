@@ -10,7 +10,7 @@ PUBLIC VUPDZ0
 
 CONTAINS
 SUBROUTINE VUPDZ0(KIDIA,KFDIA,KLON,KTILES,KSTEP,CDCONF,LDSICE,LESNICE,&
- & KTVL,KTVH,PCVL,PCVH,PCUR,PUMLEV,PVMLEV,&
+ & KTVL,KTVH,PCVL,PCVH,PLAIL,PLAIH,PCUR,PUMLEV,PVMLEV,&
  & PTMLEV,PQMLEV,PAPHMS,PGEOMLEV,PDSN,&
  & PUSTRTI,PVSTRTI,PAHFSTI,PEVAPTI,&
  & PHLICE, &
@@ -146,6 +146,8 @@ INTEGER(KIND=JPIM),INTENT(IN)    :: KTVL(KLON)
 INTEGER(KIND=JPIM),INTENT(IN)    :: KTVH(KLON) 
 REAL(KIND=JPRB)   ,INTENT(IN)    :: PCVL(KLON) 
 REAL(KIND=JPRB)   ,INTENT(IN)    :: PCVH(KLON)
+REAL(KIND=JPRB)   ,INTENT(IN)    :: PLAIL(KLON)
+REAL(KIND=JPRB)   ,INTENT(IN)    :: PLAIH(KLON)
 REAL(KIND=JPRB)   ,INTENT(IN)    :: PCUR(KLON)
 REAL(KIND=JPRB)   ,INTENT(IN)    :: PHLICE(:)
 REAL(KIND=JPRB)   ,INTENT(IN)    :: PUMLEV(:) 
@@ -201,6 +203,26 @@ REAL(KIND=JPRD) :: ZDUMMY
 REAL(KIND=JPRB) :: ZURBF,ZPCVL, ZPCVH, ZPCVB
 REAL(KIND=JPRB) :: ZZ0HSNOW, ZZ0QSNOW
 
+! local for Raupach Z0 computation
+REAL(KIND=JPRB) :: ZKAR    ! minus Von Karman cst (0.4)
+REAL(KIND=JPRB) :: ZHL     ! Low vegetation height
+REAL(KIND=JPRB) :: ZHH     ! High vegetation height
+REAL(KIND=JPRB) :: ZCR     ! Raupach cst(~7.5)
+REAL(KIND=JPRB) :: ZCD     !Drag coefficient for an isolated roughness element (~0.3)
+
+REAL(KIND=JPRB) :: ZOmegaL !Clumping index for low vegetation (often more uniform)
+REAL(KIND=JPRB) :: ZOmegaH !Clumping index for high vegetation (forests are often clumped)
+REAL(KIND=JPRB) :: ZGmL    !Projection coefficient for low vegetation (more vertical structure)
+REAL(KIND=JPRB) :: ZGmH    !Projection coefficient for high vegetation (random leaf angles)
+REAL(KIND=JPRB) :: ZLAMeffL !effective frontal area index coef. with clumping Low Veg (default value for omega=1 x Gm=0.5 )
+REAL(KIND=JPRB) :: ZLAMeffH !effective frontal area index coef. with clumping High veg
+REAL(KIND=JPRB) :: ZZEPSILON
+REAL(KIND=JPRB) :: ZDL(KLON)      ! zero-plane displacement height for low veg
+REAL(KIND=JPRB) :: ZDH(KLON)      ! zero-plane displacement height for high veg
+REAL(KIND=JPRB) :: ZRHML(KLON)     ! roughness heat and momentum ratio low veg
+REAL(KIND=JPRB) :: ZRHMH(KLON)     ! roughness heat and momentum ratio high veg
+
+
 
 LOGICAL :: LLCURR,LLINIT
 
@@ -226,7 +248,7 @@ ASSOCIATE(RCPD=>YDCST%RCPD, RD=>YDCST%RD, RETV=>YDCST%RETV, RG=>YDCST%RG, &
  & LEFLAKE=>YDFLAKE%LEFLAKE, LEURBAN=>YDURB%LEURBAN, RH_ICE_MIN_FLK=>YDFLAKE%RH_ICE_MIN_FLK, &
  & LWCOU2W=>YDEXC%LWCOU2W, LWCOUHMF=>YDEXC%LWCOUHMF, &
  & RVZ0M_SNOW=>YDVEG%RVZ0M_SNOW, RVZ0M_BARE=>YDVEG%RVZ0M_BARE, &
- & RVZ0H_SNOW=>YDVEG%RVZ0H_SNOW, RVZ0H_BARE=>YDVEG%RVZ0H_BARE, &
+ & RVZ0H_SNOW=>YDVEG%RVZ0H_SNOW, RVZ0H_BARE=>YDVEG%RVZ0H_BARE, LEVZ0=>YDVEG%LEVZ0, &
  & RURBZTM=>YDURB%RURBZTM, RURBZTH=>YDURB%RURBZTH, RVZ0HH2D=>PSSDP2(:,SSDP2D_ID%NRVZ0HH2D), &
  & RVZ0HL2D=>PSSDP2(:,SSDP2D_ID%NRVZ0HL2D), RVZ0MH2D=>PSSDP2(:,SSDP2D_ID%NRVZ0MH2D), &
  & RVZ0ML2D=>PSSDP2(:,SSDP2D_ID%NRVZ0ML2D), RBLENDSNVEG=>YDEXC%RBLENDSNVEG, &
@@ -265,9 +287,70 @@ ENDIF
 LLINIT= ( KSTEP == 0)
 
 
+!*         2.0      PRE-COMPUTATION OF VARYING Z0 (modified Raupach94 with vegetation clumpig effect)
+
+IF (LEVZ0) THEN  ! Compute Z0 after Raupach
+
+
+
+  ZZEPSILON= 10._JPRB**(-MAXEXPONENT(ZZEPSILON)/10)
+
+  ZKAR = -0.4_JPRB ! minus Von Karman cst
+  ZHL = 2.0_JPRB   ! Assumed Low vegetation height
+  ZHH = 17_JPRB    ! Assumed high vegetation height
+  ZCR = 7.5_JPRB   ! Raupach cst
+  ZCD = 0.3_JPRB   ! Assumed Drag coefficient for an isolated roughness element
+
+! Taking clumping into consideration, Clumping indices (Ω), (A clumping index map could be introduced later).
+! Ω < 1: Clumped distribution, Ω = 1: Random, Ω > 1: Regular dispersion
+ZOmegaL = 0.9_JPRB  ! Clumping index for low vegetation (often more uniform)
+ZOmegaH = 0.7_JPRB  ! Clumping index for high vegetation (forests are often clumped)
+
+! Projection coefficients (Gm)
+ZGmL = 0.6_JPRB  ! Projection coefficient for low vegetation (more vertical structure)
+ZGmH = 0.9_JPRB  ! Projection coefficient for high vegetation (random leaf angles)
+!Calculate effective frontal area index coef. with clumping (default value for lamda corf os 0.5)
+ZLAMeffL = ZGmL * ZOmegaL 
+ZLAMeffH = ZGmH * ZOmegaH
+
+ DO JL=KIDIA,KFDIA
+ ! for the moment get the ratio of z0m/z0h from the Lup table or set it to a cst (100)
+  IF (RVZ0HL2D(JL) > ZZEPSILON ) THEN
+    ZRHML(JL)=RVZ0ML2D(JL)/RVZ0HL2D(JL)
+  ELSE
+    ZRHML(JL)=100._JPRB
+  ENDIF
+  IF (RVZ0HH2D(JL) > ZZEPSILON ) THEN
+    ZRHMH(JL)=RVZ0MH2D(JL)/RVZ0HH2D(JL)
+  ELSE
+    ZRHMH(JL)=1._JPRB
+  ENDIF
+
+
+  IF (PLAIL(JL) > 0.05_JPRB ) THEN
+  ZDL(JL)  = ZHL* (1._JPRB - ((1._JPRB-EXP(-SQRT(ZCR*ZLAMeffL*PLAIL(JL))))/(-SQRT(ZCR*ZLAMeffL*PLAIL(JL))))) ! 0-plane displacement hght
+  RVZ0ML2D(JL)  = ZHL* (1._JPRB- ZDL(JL)/ZHL)*EXP(ZKAR*SQRT(2._JPRB/(ZCD*ZLAMeffL*PLAIL(JL)))) 
+  ELSE
+  RVZ0ML2D(JL)  = 0.01_JPRB  
+  ENDIF
+  IF (PLAIH(JL) > 0.05_JPRB ) THEN  
+  ZDH(JL)  = ZHH* (1._JPRB - ((1._JPRB-EXP(-SQRT(ZCR*ZLAMeffH*PLAIH(JL))))/(-SQRT(ZCR*ZLAMeffH*PLAIH(JL))))) ! 0-plane displacement hght 
+  RVZ0MH2D(JL)  = ZHH* (1._JPRB- ZDH(JL)/ZHH)*EXP(ZKAR*SQRT(2._JPRB/(ZCD*ZLAMeffH*PLAIH(JL))))
+  ELSE
+  RVZ0MH2D(JL)  = 0.01_JPRB
+  ENDIF 
+ 
+  RVZ0HL2D(JL)   = RVZ0ML2D(JL)/ZRHML(JL)
+  RVZ0HH2D(JL)   = RVZ0MH2D(JL)/ZRHMH(JL)
+ ENDDO
+
+ENDIF
+
+
+
 !     ------------------------------------------------------------------
 
-!*         2.      PRE-COMPUTATION OF TILE INDEPENDENT ARRAYS
+!*         2.1      PRE-COMPUTATION OF TILE INDEPENDENT ARRAYS
 !                  
 DO JL=KIDIA,KFDIA
   ZRHO(JL)=PAPHMS(JL)/( RD*PTMLEV(JL)*(1.0_JPRB+RETV*PQMLEV(JL)) )
@@ -280,6 +363,7 @@ DO JL=KIDIA,KFDIA
   ZSNWGHT(JL)=MIN(MAX(PDSN(JL),0.0_JPRB)/RBLENDSNVEG,1.0_JPRB)
   ZDUA(JL)=SQRT(ZDU2(JL))
 ENDDO
+
 !*         3.   ESTIMATE SURF.FL. FOR STEP 0
 !*              (ASSUME NEUTRAL STRATIFICATION)
 IF (LLINIT) THEN
