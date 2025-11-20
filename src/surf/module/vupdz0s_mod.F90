@@ -188,7 +188,7 @@ REAL(KIND=JPHOOK) :: ZHOOK_HANDLE
 !             INCLUDE STABILITY FUNCTIONS
 !             ------- --------- ---------
 
-#include "fcsvdfs.h"
+!#include "fcsvdfs.h"
 
 !             INCLUDE ROUGNESS LENGTH FUNCTIONS
 !             ------- -------- ------ ---------
