@@ -105,7 +105,7 @@ TYPE(TCST)        , INTENT(IN)   :: YDCST
 
 REAL(KIND=JPRB)   , INTENT(OUT)  :: PRSN(:,:)
 
-REAL(KIND=JPRB)   , INTENT(OUT)  :: PDHTSS(:,:,:)
+REAL(KIND=JPRB)                  :: PDHTSS(:,:,:)
 
 ! Local variables 
 INTEGER(KIND=JPIM)  :: JL,JK
