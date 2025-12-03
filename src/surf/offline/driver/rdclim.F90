@@ -492,7 +492,7 @@ DO IVAR=1,NVARS2D
        IF ( STATUS /= 0 ) ZBUF(:) = 1._JPRB
        VFZ0H(1:NPOI)=EXP(PACK(ZBUF,LMASK(ISTP:IENP)))
     CASE('x')
-       IF ( STATUS /= 0 ) ZBUF(:) = -1
+       IF ( STATUS /= 0 ) ZBUF(:) = -1._JPRB
        VFPGLOB(1:NPOI)=PACK(ZBUF,LMASK(ISTP:IENP))
     CASE('CLAKEF')
        IF ( STATUS /= 0 ) THEN
