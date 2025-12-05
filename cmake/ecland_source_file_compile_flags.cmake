@@ -53,17 +53,6 @@ if (CMAKE_Fortran_COMPILER_ID MATCHES "PGI|NVHPC")
         PROPERTIES OVERRIDE_COMPILE_FLAGS_BIT "-Mbyteswapio -Kieee -mp -g -O1 -tp=host -Wlopt,'-passes=default<O2>' -Wllc,-O1"
     )
 
-    if( CMAKE_BUILD_TYPE MATCHES "Debug" )
-        # TODO: we need this because compilation with nvhpc hangs interminably when
-        # debugging symbls are requested for cpg1s.F90, so we disable it for debug builds.
-        # This may be fixed with the introduction of the memory blocking, so this should
-        # be revisited then.
-        set_source_files_properties(
-                offline/driver/cpg1s.F90
-            PROPERTIES COMPILE_OPTIONS "-Mnoopenmp"
-        )
-    endif()
-
 endif()
 
 # See ifs-source/cmake/compile_flags.cmake for more flags that may be needed!
