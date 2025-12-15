@@ -548,7 +548,7 @@ ASSOCIATE(LEOCWA=>YDEXC%LEOCWA, LEOCCO=>YDEXC%LEOCCO, REPDU2=>YDEXC%REPDU2, &
  & RG=>YDCST%RG, RETV=>YDCST%RETV, RSSRFLTIMAX=>YDEXC%RSSRFLTIMAX, &
  & LEMIS_BVOC=>YDBVOC%LEMIS_BVOC, &
  & RVZ0M=>YDVEG%RVZ0M, LECTESSEL=>YDVEG%LECTESSEL, RVTRSR=>YDVEG%RVTRSR, RBLENDZ0=>YDEXC%RBLENDZ0, &
- & LESNICE=>YDSOIL%LESNICE)
+ & LEVZ0=>YDVEG%LEVZ0, LESNICE=>YDSOIL%LESNICE)
 
 ZRG         = 1.0_JPRB/RG        !     -"-
 DO JL=KIDIA,KFDIA
@@ -691,13 +691,14 @@ DO JTILE=1,KTILES
 ENDDO
 
 !*         Put dominant tile Z0M on all tiles
-! commented to test using tiled Z0 from Raupach
-!DO JTILE=1,KTILES
-!  DO JL=KIDIA,KFDIA
-!    ZZ0MTI(JL,JTILE)=PZ0M(JL)
-!  ENDDO
-!ENDDO
-
+IF (.NOT. LEVZ0) THEN  ! when using Z0 from Raupach94 keep tiled z0
+ commented to test using tiled Z0 from Raupach
+ DO JTILE=1,KTILES
+  DO JL=KIDIA,KFDIA
+    ZZ0MTI(JL,JTILE)=PZ0M(JL)
+  ENDDO
+ ENDDO
+ENDIF
 !     ------------------------------------------------------------------
 
 !*         2.     SURFACE BOUNDARY CONDITIONS FOR T AND Q
