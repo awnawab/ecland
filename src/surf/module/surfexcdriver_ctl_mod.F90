@@ -692,7 +692,7 @@ ENDDO
 
 !*         Put dominant tile Z0M on all tiles
 IF (.NOT. LEVZ0) THEN  ! when using Z0 from Raupach94 keep tiled z0
- commented to test using tiled Z0 from Raupach
+! commented to test using tiled Z0 from Raupach
  DO JTILE=1,KTILES
   DO JL=KIDIA,KFDIA
     ZZ0MTI(JL,JTILE)=PZ0M(JL)
