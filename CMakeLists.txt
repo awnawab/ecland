@@ -56,6 +56,10 @@ ecbuild_add_option( FEATURE SINGLE_PRECISION
                     DEFAULT OFF
                     DESCRIPTION "Support for Single Precision" )
 
+ecbuild_add_option( FEATURE IFSBENCH_TESTS
+                    DEFAULT ON
+                    DESCRIPTION "Enable Python-based IFS-bench tests" )
+
 ### Define precisions
 set( HAVE_sp OFF )
 set( HAVE_dp OFF )
