@@ -253,7 +253,6 @@ ENDDO !IST LOOP
 
 
 !     ------------------------------------------------------------------
-!These shall be called at the last timestep only
 !CALL PSURF%FINAL
 !CALL PSURFL%FINAL
 !CALL PDIAG%FINAL
