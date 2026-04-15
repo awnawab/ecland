@@ -136,9 +136,11 @@ foreach( prec sp dp )
       INCLUDES
         offline/function
         offline/namelist
+        interface
       LIBS 
         ${PROJECT_NAME}_offline_driver_intfb ${PROJECT_NAME}_surf_${prec} ${PROJECT_NAME}_cmflood_${prec}
         fiat parkind_${prec}
+        field_api_${prec}
         ${OpenMP_Fortran_LIBRARIES}
         NetCDF::NetCDF_Fortran
       DEFINITIONS UseMPI_CMF
