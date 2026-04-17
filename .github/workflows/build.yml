@@ -257,7 +257,7 @@ jobs:
         dependencies: |
           ecmwf/ecbuild
           ecmwf-ifs/fiat@refs/tags/1.6.2
-          ecmwf/eccodes@refs/tags/2.44.0
+          ecmwf/eccodes@refs/tags/2.46.2
         dependency_branch: develop
         dependency_cmake_options: |
           ecmwf/eccodes: "-DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DENABLE_MEMFS=ON -DENABLE_JPG=OFF -DENABLE_PNG=OFF"
