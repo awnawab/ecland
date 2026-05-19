@@ -131,6 +131,10 @@ jobs:
           sudo apt-get install -y build-essential
           sudo apt-get install libaec-dev
           sudo apt-get install ninja-build libcurl4-openssl-dev
+          if [[ "${{ matrix.compiler }}" =~ nvhpc ]]; then
+            export DR_HOOK_TRAPFPE=0
+            echo "DR_HOOK_TRAPFPE=0" >> $GITHUB_ENV
+          fi
         fi
 
         if [[ "${{ matrix.name }}" =~ gnu ]]; then
