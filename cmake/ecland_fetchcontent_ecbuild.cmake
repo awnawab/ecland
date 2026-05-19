@@ -1,7 +1,7 @@
 include(FetchContent)
 FetchContent_Populate(
     ecbuild
-    URL            https://github.com/ecmwf/ecbuild/archive/refs/tags/3.11.0.tar.gz
+    URL            https://github.com/ecmwf/ecbuild/archive/refs/tags/3.14.2.tar.gz
     SOURCE_DIR     ${CMAKE_BINARY_DIR}/ecbuild
     BINARY_DIR     ${CMAKE_BINARY_DIR}/_deps/ecbuild-build
     SUBBUILD_DIR   ${CMAKE_BINARY_DIR}/_deps/ecbuild-subbuild
