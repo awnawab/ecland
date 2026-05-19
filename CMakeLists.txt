@@ -10,7 +10,7 @@ cmake_minimum_required( VERSION 3.24 FATAL_ERROR )
 
 include(FetchContent)
 
-find_package( ecbuild 3.11 QUIET HINTS ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../ecbuild )
+find_package( ecbuild 3.14.2 QUIET HINTS ${CMAKE_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/../ecbuild )
 if( NOT ecbuild_FOUND )
   include(cmake/ecland_fetchcontent_ecbuild.cmake)
 endif()
@@ -80,8 +80,10 @@ endif()
 ########################################################################
 
 # Trigger the use of per sourcefile overrideable compiler flags in ecbuild
-set(ECBUILD_COMPILE_FLAGS ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ecland_compile_flags.cmake)
-ecbuild_override_compiler_flags(COMPILE_FLAGS ${ECBUILD_COMPILE_FLAGS})
+ecbuild_override_compiler_flags(
+  COMPILE_FLAGS ${CMAKE_CURRENT_SOURCE_DIR}/cmake/ecland_compile_flags.cmake
+  INHERIT_ECBUILD_FLAGS
+)
 
 add_subdirectory(src)
 add_subdirectory(share)
