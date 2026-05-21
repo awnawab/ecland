@@ -212,12 +212,18 @@ list(APPEND external_src
 )
 list(TRANSFORM external_src PREPEND external/)
 
+list(APPEND function_src
+    fcz0wn.F90
+)
+list(TRANSFORM function_src PREPEND function/)
+
 foreach( prec sp dp )
   if( HAVE_${prec} )
      ecbuild_add_library( TARGET ${PROJECT_NAME}_surf_${prec}
          SOURCES ${module_src}
                  offline/driver/ibm.F90 # dummies for IBM vmass library
                  ${external_src}
+                 ${function_src}
          PUBLIC_LIBS fiat parkind_${prec}
          PRIVATE_LIBS ${OpenMP_Fortran_LIBRARIES}
          PRIVATE_INCLUDES function
