@@ -131,7 +131,7 @@ LOGICAL           ,INTENT(IN)    :: LDLAND(KLON)
 REAL(KIND=JPRB)   ,INTENT(IN)    :: PALBF(KLON)
 REAL(KIND=JPRB)   ,INTENT(IN)    :: PALBICEF(KLON)
 REAL(KIND=JPRB)   ,INTENT(IN)    :: PTVH(KLON)
-! PROBLEM!? YDSURF%YSD_VF%IALSTART:YDSURF%YSD_VF%IALEND ... with YDSURF != YDESURF
+! PROBLEM!? Surface-object YSD_VF%IALSTART:YSD_VF%IALEND ... with mismatched surface metadata
 ! PALCOEFF : REAL   : MODIS albedo coefficients:
 !   For the 4-component scheme, the second dimension indexes
 !      1: UV/Vis direct,  2: UV/Vis diffuse,
