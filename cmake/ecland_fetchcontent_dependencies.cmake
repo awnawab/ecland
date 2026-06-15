@@ -23,7 +23,7 @@ set( ECCODES_ENABLE_PNG OFF )
 #### fiat
 FetchContent_Declare(
   fiat
-  URL https://github.com/ecmwf-ifs/fiat/archive/refs/tags/1.6.1.tar.gz
+  URL https://github.com/ecmwf-ifs/fiat/archive/refs/tags/1.6.2.tar.gz
   FIND_PACKAGE_ARGS
 )
 set( FIAT_ENABLE_TESTS OFF )
