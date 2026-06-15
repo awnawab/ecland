@@ -64,28 +64,6 @@ if (CMAKE_Fortran_COMPILER_ID MATCHES "PGI|NVHPC")
         )
     endif()
 
-elseif (CMAKE_Fortran_COMPILER_ID MATCHES "Intel")
-
-  if(DEFINED fpe_flags)
-    string(REPLACE ${fpe_flags} "" _flags_no_fpe "${${PNAME}_Fortran_FLAGS}")
-
-    set( _flags_no_fpe "${_flags_no_fpe} -fpe-all=3" )
-
-    set_source_files_properties(
-              module/sppcfl_mod.F90
-              PROPERTIES OVERRIDE_COMPILE_FLAGS "${_flags_no_fpe}"
-          )
-  endif()
-
-  if(DEFINED initsnan_flags)
-    string(REPLACE ${initsnan_flags} "" _flags_no_initsnan "${${PNAME}_Fortran_FLAGS_DEBUG}")
-
-    set_source_files_properties(
-              module/sppcfl_mod.F90
-              PROPERTIES OVERRIDE_COMPILE_FLAGS_DEBUG "${_flags_no_initsnan}"
-          )
-  endif()
-
 endif()
 
 # See ifs-source/cmake/compile_flags.cmake for more flags that may be needed!
