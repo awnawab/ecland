@@ -96,7 +96,9 @@ add_subdirectory(share)
 
 ### Tests
 
-add_subdirectory(tests)
+if( HAVE_TESTS )
+  add_subdirectory(tests)
+endif()
 
 ### Documentation
 
